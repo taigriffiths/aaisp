@@ -1,0 +1,17 @@
+#+TITLE: AAISP API interface for shell
+#+AUTHOR: Tyler Griffiths
+
+* Aim
+
+This aims to be a reasonably featureful and complete interface
+to AAISP's control APIs, as well as the SMS sending API. 
+The main purpose is to look up various bits of data regarding
+an account.
+
+* Usage
+
+Make available the environment variables in aavars, including
+control usernames and passwords. Don't set these files to be
+globally readable!
+
+The =aa= script documents itself in use, call =aa help=.

@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# Scripts to work with AAISP APIs.
+
+## Get the set variables
+. ./aavars
+
+## Returns all of its arguments except the first.
+## This is useful for writing subcommands.
+rest() {
+	echo "${@:2}"
+}
+
+showhelp() {
+	echo "$0: Usage:"
+	echo " $0 sms  - SMS api"
+	echo " $0 bb   - broadband lookups"
+	echo " $0 voip - VoIP lookups"
+	echo " $0 bill - billing"
+}
+
+sms() {
+	echo "Not implemented yet, sorry"
+}
+
+broadband() {
+	case $1 in
+		"quota"|q)
+			broadband_quota $(rest $@)
+			;;
+	esac
+}	
+
+broadband_quota() {
+
+	## Find the monthly quota remaining on a broadband line.
+
+	## Find days left in current month, which is approximately
+	## presumed to be the quota reset cycle. This is true for 
+	## my case, so maybe others. Dangerous words.
+	MONTH=`date +%m`
+	YEAR=`date +%Y`
+	DAYSINMONTH=`cal $MONTH $YEAR | egrep -v '[A-Za-z]' | wc -w`
+	CURRENTDAY=`date +%d`
+
+	## Quota in kB from AAISP API call
+	QUOTA_REMAINING="$(http https://chaos2.aa.net.uk/broadband/quota "control_login==$CONTROL_USER" "control_password==$CONTROL_PASS" | jq --raw-output '.quota[0].quota_remaining')"
+
+	## Calculate quota in meaningful units
+	let "QUOTA_REMAINING_GB = $QUOTA_REMAINING / (1000*1000*1000)"
+	let "DAYS_REMAINING = $DAYSINMONTH - $CURRENTDAY"
+	let "PERDAY = $QUOTA_REMAINING_GB / DAYS_REMAINING"
+
+	## Report the results
+	echo $QUOTA_REMAINING_GB GB for $DAYS_REMAINING days -- $PERDAY GB per day.
+}
+case $1 in
+	"sms")
+		sms $(rest $@)
+		;;
+	"bb")
+		broadband $(rest $@)
+		;;
+	"help"|h)
+		showhelp
+		;;
+esac
