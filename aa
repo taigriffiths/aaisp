@@ -44,7 +44,7 @@ broadband_quota() {
 	CURRENTDAY=`date +%d`
 
 	## Quota in kB from AAISP API call
-	QUOTA_REMAINING="$(http https://chaos2.aa.net.uk/broadband/quota "control_login==$CONTROL_USER" "control_password==$CONTROL_PASS" | jq --raw-output '.quota[0].quota_remaining')"
+	QUOTA_REMAINING="$(http https://chaos2.aa.net.uk/broadband/quota "control_login==$CONTROL_LOGIN" "control_password==$CONTROL_PASS" | jq --raw-output '.quota[0].quota_remaining')"
 
 	## Calculate quota in meaningful units
 	let "QUOTA_REMAINING_GB = $QUOTA_REMAINING / (1000*1000*1000)"
