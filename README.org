@@ -15,3 +15,6 @@ control usernames and passwords. Don't set these files to be
 globally readable!
 
 The =aa= script documents itself in use, call =aa help=.
+
+The dependencies are =bash= (although untested, most modern 
+shells should work) and =httpie=.
