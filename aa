@@ -14,7 +14,7 @@ rest() {
 showhelp() {
 	echo "$0: Usage:"
 	echo " $0 sms  - SMS api"
-	echo " $0 bb   - broadband lookups"
+	echo " $0 broadband  - broadband lookups"
 	echo " $0 voip - VoIP lookups"
 	echo " $0 bill - billing"
 }
@@ -28,8 +28,17 @@ broadband() {
 		"quota"|q)
 			broadband_quota $(rest $@)
 			;;
+		*)
+			broadband_help
+			;;
 	esac
 }	
+
+broadband_help() {
+	echo "$0 broadband: Usage:"
+	echo " $0 broadband quota: show remaining quota on line"
+}
+		
 
 broadband_quota() {
 
@@ -61,7 +70,7 @@ case $1 in
 	"bb")
 		broadband $(rest $@)
 		;;
-	"help"|h)
+	*)
 		showhelp
 		;;
 esac
